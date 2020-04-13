@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpd.dao.VisitDao">
+	<insert id="addVisit" parameterType="com.xpd.bean.Visit">
+		insert into visit (visit_customer_id,visit_user_id,visit_time,visit_info,visit_pattern,visit_pay,visit_money) values 
+		 (#{visit_customer_id},#{visit_user_id},#{visit_time},#{visit_info},#{visit_pattern},#{visit_pay},#{visit_money})
+	</insert>
+	<update id="updateVisit" parameterType="com.xpd.bean.Visit">
+		update visit set visit_customer_id=#{visit_customer_id},visit_user_id=#{visit_user_id},
+		 visit_time=#{visit_time},visit_info=#{visit_info},visit_pattern=#{visit_pattern},
+		 visit_pay=#{visit_pay},visit_money=#{visit_money} where visit_id=#{visit_id}
+	</update>
+	<delete id="deleteVisit" parameterType="com.xpd.bean.Visit">
+		delete from visit where visit_id=#{visit_id}
+	</delete>
+	<select id="showVisit" parameterType="java.util.Map" resultType="com.xpd.bean.Visit">
+		select * from visit limit ${start},${limit}
+	</select>
+	<select id="getVisit" parameterType="java.util.Map" resultType="com.xpd.bean.Visit">
+		select * from visit where visit_id like '%${checktext}%' 
+		 or visit_customer_id like '%${checktext}%' 
+		 or visit_user_id like '%${checktext}%' 
+		 or visit_time like '%${checktext}%' 
+		 or visit_info like '%${checktext}%' 
+		 or visit_pattern like '%${checktext}%' 
+		 or visit_pay like '%${checktext}%' 
+		 or visit_money like '%${checktext}%' 
+		 limit ${start},${limit}
+	</select>
+	<select id="getVisitCount" parameterType="java.util.Map" resultType="int">
+		select count(*) from visit where visit_id like '%${checktext}%' 
+		 or visit_customer_id like '%${checktext}%' 
+		 or visit_user_id like '%${checktext}%' 
+		 or visit_time like '%${checktext}%' 
+		 or visit_info like '%${checktext}%' 
+		 or visit_pattern like '%${checktext}%' 
+		 or visit_pay like '%${checktext}%' 
+		 or visit_money like '%${checktext}%'
+	</select>
+	
+	<insert id="visit_perm2" parameterType="map">
+		insert into visit_permission (bmid,perm_id) values 
+		 <foreach collection="perms" item="item" index="index" separator=",">
+		 (#{item.bmid},#{item.perm})
+		 </foreach>
+	</insert>
+	
+</mapper>

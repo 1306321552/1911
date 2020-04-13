@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xpd.dao.CustomerDao">
+	<insert id="addCustomer" parameterType="com.xpd.bean.Customer">
+		insert into customer (customer_id,customer_name,customer_man,customer_tel,customer_email,customer_addr,customer_grade,create_time,state,customer_public) values 
+		 (#{customer_id},#{customer_name},#{customer_man},#{customer_tel},#{customer_email},#{customer_addr},#{customer_grade},#{create_time},0,0)
+	</insert>
+	<update id="updateCustomer" parameterType="com.xpd.bean.Customer">
+		update customer set customer_name=#{customer_name},customer_man=#{customer_man},customer_tel=#{customer_tel},
+		customer_email=#{customer_email},customer_addr=#{customer_addr},customer_grade=#{customer_grade},create_time=#{create_time} 
+		 where customer_id=#{customer_id}
+	</update>
+	<update id="documentaryCustomer" parameterType="com.xpd.bean.Customer">
+		update customer set customer_public=1,customer_user=#{customer_user} where customer_id=#{customer_id}
+	</update>
+	<update id="documentaryCustomer_cancel" parameterType="com.xpd.bean.Customer">
+		update customer set customer_public=0,customer_user="" where customer_id=#{customer_id}
+	</update>
+	<delete id="deleteCustomer" parameterType="com.xpd.bean.Customer">
+		delete from customer where customer_id=#{customer_id}
+	</delete>
+	<select id="showCustomer" parameterType="java.util.Map" resultType="com.xpd.bean.Customer">
+		select * from customer limit ${start},${limit}
+	</select>
+	<select id="showCustomer_public" parameterType="java.util.Map" resultType="com.xpd.bean.Customer">
+		select * from customer where customer_public=0 limit ${start},${limit}
+	</select>
+	<select id="showCustomer_documentary" parameterType="java.util.Map" resultType="com.xpd.bean.Customer">
+		select * from customer where customer_user=#{customer_user} limit ${start},${limit}
+	</select>
+	<select id="getCustomer" parameterType="java.util.Map" resultType="com.xpd.bean.Customer">
+		select * from customer where customer_id like '%${checktext}%' 
+		 or customer_name like '%${checktext}%' 
+		 or customer_man like '%${checktext}%' 
+		 or customer_tel like '%${checktext}%' 
+		 or customer_email like '%${checktext}%' 
+		 or customer_addr like '%${checktext}%' 
+		 or customer_grade like '%${checktext}%' 
+		 or create_time like '%${checktext}%' 
+		 or customer_user like '%${checktext}%' 
+		 limit ${start},${limit}
+	</select>
+	<select id="getCustomer_public" parameterType="java.util.Map" resultType="com.xpd.bean.Customer">
+		select * from customer where (customer_id like '%${checktext}%' 
+		 or customer_name like '%${checktext}%' 
+		 or customer_man like '%${checktext}%' 
+		 or customer_tel like '%${checktext}%' 
+		 or customer_email like '%${checktext}%' 
+		 or customer_addr like '%${checktext}%' 
+		 or customer_grade like '%${checktext}%' 
+		 or create_time like '%${checktext}%' 
+		 or customer_user like '%${checktext}%') 
+		 and customer_public=0 
+		 limit ${start},${limit}
+	</select>
+	<select id="getCustomer_documentary" parameterType="java.util.Map" resultType="com.xpd.bean.Customer">
+		select * from customer where (customer_id like '%${checktext}%' 
+		 or customer_name like '%${checktext}%' 
+		 or customer_man like '%${checktext}%' 
+		 or customer_tel like '%${checktext}%' 
+		 or customer_email like '%${checktext}%' 
+		 or customer_addr like '%${checktext}%' 
+		 or customer_grade like '%${checktext}%' 
+		 or create_time like '%${checktext}%' 
+		 or customer_user like '%${checktext}%') 
+		 and customer_user=#{customer_user}
+		 limit ${start},${limit}
+	</select>
+	<select id="getCustomerCount" parameterType="java.util.Map" resultType="int">
+		select count(*) from customer where customer_id like '%${checktext}%' 
+		 or customer_name like '%${checktext}%' 
+		 or customer_man like '%${checktext}%' 
+		 or customer_tel like '%${checktext}%' 
+		 or customer_email like '%${checktext}%' 
+		 or customer_addr like '%${checktext}%' 
+		 or customer_grade like '%${checktext}%' 
+		 or create_time like '%${checktext}%' 
+		 or customer_user like '%${checktext}%' 
+	</select>
+	<select id="getCustomerCount_public" parameterType="java.util.Map" resultType="int">
+		select count(*) from customer where (customer_id like '%${checktext}%' 
+		 or customer_name like '%${checktext}%' 
+		 or customer_man like '%${checktext}%' 
+		 or customer_tel like '%${checktext}%' 
+		 or customer_email like '%${checktext}%' 
+		 or customer_addr like '%${checktext}%' 
+		 or customer_grade like '%${checktext}%' 
+		 or create_time like '%${checktext}%' 
+		 or customer_user like '%${checktext}%') 
+		 and customer_public=0 
+	</select>
+	<select id="getCustomerCount_documentary" parameterType="java.util.Map" resultType="int">
+		select count(*) from customer where (customer_id like '%${checktext}%' 
+		 or customer_name like '%${checktext}%' 
+		 or customer_man like '%${checktext}%' 
+		 or customer_tel like '%${checktext}%' 
+		 or customer_email like '%${checktext}%' 
+		 or customer_addr like '%${checktext}%' 
+		 or customer_grade like '%${checktext}%' 
+		 or create_time like '%${checktext}%' 
+		 or customer_user like '%${checktext}%') 
+		 and customer_user=#{customer_user}
+	</select>
+	
+	<insert id="customer_perm2" parameterType="map">
+		insert into customer_permission (bmid,perm_id) values 
+		 <foreach collection="perms" item="item" index="index" separator=",">
+		 (#{item.bmid},#{item.perm})
+		 </foreach>
+	</insert>
+	
+</mapper>
